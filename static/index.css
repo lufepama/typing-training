@@ -1,0 +1,38 @@
+.training-content{
+    margin:auto auto;
+    display:flex;
+    flex-direction: column;
+    width: 800px;
+    height: 250px;
+    background-color:white;
+}
+.words-content{
+    background-color: #D3DFE9;
+    width: 100%;
+    height: 80%;
+}
+.timer-content{
+    height: 20%;
+}
+.display-words-content{
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+.display-words-content{
+    margin-top: 8%;
+}
+.display-words-content-fourth, .display-words-content-fifth{
+    color:#666;
+    background-color: inherit;
+    filter: blur(1.5px);
+}
+.display-words-content-third{
+    background-color: inherit;
+    filter: blur(0px);
+}
+
+.trialclass-5{
+    color: red;
+}
