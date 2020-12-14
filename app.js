@@ -3,19 +3,20 @@
 // All of the Node.js APIs are available in this process.
 
 const { TouchBarScrubber } = require("electron")
+const { TimerControl } = require("./timerControl.js")
+
 
 let firstWord = document.getElementById('firstWord')
 let secondWord = document.getElementById('secondWord')
-let thirdWord = document.getElementById('thirdWord')
+let thirdWord = document.getElementById('thirdWord-span-black')
 let fourthWord = document.getElementById('fourthWord')
 let fifthWord = document.getElementById('fifthWord')
 let changeBtn = document.getElementById('change-btn')
 let thirdWordDiv = document.getElementById('display-words-content-third')
-let trialInput = document.getElementById('trial')
-
-wordsList= ['palabra1','palabra2','hola','palabra4','palabra5','quetal','piezo',
-            'palabra8','palabra9','palabra10','palabra11','palabra12','palabra13','palabra14',
-            'palabra15','palabra16','palabra17','palabra18','palabra19','palabra20','palabra21',
+let enterIsPressed = true
+wordsList= ['hola','me','llamo','felipe','paz','martinez','y',
+            'voy','a','ser','papa','dentro','de','siete',
+            'meses','palabra16','palabra17','palabra18','palabra19','palabra20','palabra21',
             ]
 
 class Carousel{
@@ -38,6 +39,7 @@ class Carousel{
         let fourthWordDisplay = this.wordsList[1]
         let fifthWordDisplay = this.wordsList[2]
         this.wordIndex = 3
+        console.log(thirdWordDisplay)
         thirdWord.innerHTML = thirdWordDisplay;
         fourthWord.innerHTML = fourthWordDisplay;
         fifthWord.innerHTML = fifthWordDisplay;
@@ -52,6 +54,7 @@ class Carousel{
                 this.wordListDisplay[i] = this.wordsList[this.wordIndex]
             }
         }
+        console.log('aqui!!!!!:  ' + this.wordListDisplay)
         firstWord.innerHTML = this.wordListDisplay[0];
         secondWord.innerHTML = this.wordListDisplay[1];
         thirdWord.innerHTML = this.wordListDisplay[2];
@@ -59,37 +62,59 @@ class Carousel{
         fifthWord.innerHTML = this.wordListDisplay[4];   
         this.wordIndex++
     }
+    
+    createSpanChild(word){
+        let wordLength = word.length
+        let finalWord = document.createElement('p')
 
-    getThirdWord(){
-        return thirdWord.innerHTML
+        for (let i=0; i<wordLength; i++){
+            let newTag = document.createElement('span')
+            newTag.className = `tag-element-${i}`
+            newTag.innerHTML = `${word[i]}`
+            finalWord.appendChild(newTag)
+        }
+        return finalWord
     }
 
+    getThirdWord(){
+        return thirdWord
+    }
 }
 
-newCarousel = new Carousel(wordsList)
+let newCarousel = new Carousel(wordsList)
 newCarousel.displayWords()
 
 changeBtn.addEventListener('click', ()=>{
     newCarousel.showNextWord()
 })
 
-document.addEventListener('keypress', (keyBoard)=>{
-    if (keyBoard.key ==='Enter'){
+wordTimer = new TimerControl()
+
+document.addEventListener('keyup', (keyBoard)=>{
+
+    if (keyBoard.key === 'Enter' && enterIsPressed === true){
+        
+        wordTimer.reStartTimer()
         thirdWordDiv.style.filter= 'blur(0px)';
         let matchWord = newCarousel.getThirdWord()
-        let matchWordSplitted = matchWord.split("");
-        let matchWordLength = matchWordSplitted.length
+        let matchWordInnerText = matchWord.innerText;
+        let matchWordLength = matchWordInnerText.length
         let matchWordPointer = 0
-
-        document.addEventListener('keypress', (keyBoard)=>{
-            console.log(matchWordPointer)
-            console.log(keyBoard.key)
-            if (keyBoard.key === matchWordSplitted[matchWordPointer]){
+        document.addEventListener('keyup', (keyBoard)=>{
+            console.log(keyBoard)
+            if (keyBoard.key === 'Enter'){
+                enterIsPressed= false
+            }
+            if (keyBoard.key === matchWordInnerText[matchWordPointer]){
                 matchWordPointer++
             }
             if (matchWordPointer === matchWordLength){
-                matchWordPointer=0
+                matchWordPointer=0;
+                console.log(matchWordInnerText)
+                matchWordInnerText=''
                 newCarousel.showNextWord()
+                wordTimer.setTimer()
+                enterIsPressed = true
                 thirdWordDiv.style.filter= 'blur(1.5px)';
                 firstWord.style.color = 'green'
                 secondWord.style.color = 'green'
@@ -97,15 +122,3 @@ document.addEventListener('keypress', (keyBoard)=>{
         })
     }
 })
-
-colorArray = ['blue', 'red', 'green', 'black']
-
-for (let i=0;i<7;i++){
-    let newTag = document.createElement('span')
-    newTag.className = `trialclass-${i}`
-    console.log(newTag.className)
-    newTag.innerHTML = 'P'
-    colorChoice = colorArray[Math.floor(Math.random()*colorArray.length )]
-    newTag.style.color = `${colorChoice}`
-    trialInput.appendChild(newTag)
-}
