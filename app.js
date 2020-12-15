@@ -9,6 +9,7 @@ const { TimerControl } = require("./timerControl.js")
 let firstWord = document.getElementById('firstWord')
 let secondWord = document.getElementById('secondWord')
 let thirdWord = document.getElementById('thirdWord-span-black')
+let thirdWordGreen = document.getElementById('thirdWord-span-green')
 let fourthWord = document.getElementById('fourthWord')
 let fifthWord = document.getElementById('fifthWord')
 let changeBtn = document.getElementById('change-btn')
@@ -60,6 +61,7 @@ class Carousel{
         thirdWord.innerHTML = this.wordListDisplay[2];
         fourthWord.innerHTML = this.wordListDisplay[3];
         fifthWord.innerHTML = this.wordListDisplay[4];   
+        thirdWordGreen.innerHTML = ''
         this.wordIndex++
     }
     
@@ -78,6 +80,18 @@ class Carousel{
 
     getThirdWord(){
         return thirdWord
+    }
+
+    paintNextLetter(){
+
+        let wordArray = thirdWord.innerHTML.split("")
+        let firstLetter = wordArray[0]
+
+        wordArray.shift()
+        thirdWord.innerHTML = wordArray.join('');
+        thirdWordGreen.innerHTML+=firstLetter
+        console.log('letter: ' + firstLetter)
+        console.log('array: ' + wordArray)
     }
 }
 
@@ -100,12 +114,14 @@ document.addEventListener('keyup', (keyBoard)=>{
         let matchWordInnerText = matchWord.innerText;
         let matchWordLength = matchWordInnerText.length
         let matchWordPointer = 0
+        
         document.addEventListener('keyup', (keyBoard)=>{
             console.log(keyBoard)
             if (keyBoard.key === 'Enter'){
                 enterIsPressed= false
             }
             if (keyBoard.key === matchWordInnerText[matchWordPointer]){
+                 newCarousel.paintNextLetter()
                 matchWordPointer++
             }
             if (matchWordPointer === matchWordLength){

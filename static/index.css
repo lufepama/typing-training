@@ -23,7 +23,7 @@
 .display-words-content{
     margin-top: 8%;
 }
-.display-words-content-fourth, .display-words-content-fifth{
+.display-words-content-fourth, .display-words-content-fifth, .display-words-content-first, .display-words-content-second{
     color:#666;
     background-color: inherit;
     filter: blur(1.5px);
@@ -38,4 +38,12 @@
 }
 .tag-element-7{
     color:blue;
+}
+#thirdWord-span-green{
+    color:green;
+    font-weight: bold;
+    font-size: 20px;
+}
+#thirdWord-span-black{
+    color:black;
 }
