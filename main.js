@@ -1,6 +1,6 @@
 // Modules
 const {app, BrowserWindow} = require('electron')
-
+require('electron-reload')(__dirname)
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let mainWindow
@@ -24,7 +24,6 @@ function createWindow () {
     mainWindow = null
   })
 }
-
 // Electron `app` is ready
 app.on('ready', createWindow)
 

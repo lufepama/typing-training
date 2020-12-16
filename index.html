@@ -5,17 +5,44 @@
     <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline'">
     <title>Hello World!</title>
     <style>
-      html { font-family: sans-serif; background: #2B2E3B; color: #9FEAF9; }
+      html { font-family: sans-serif; background: #2B2E3B; color: black; }
     </style>
+    <link rel='stylesheet' type='text/css' href='./static/index.css'>
   </head>
   <body>
 
     <h1>Hello Electron!</h1>
     <p>Build cross-platform desktop apps with JavaScript, HTML, and CSS</p>
 
-    <script>
-      // You can also require other files to run in this process
-      require('./renderer.js')
-    </script>
+    <div class='main-content'>
+        <div class='training-content' id='training-content'>
+            <div class ='timer-content' id='timer-content'>
+            </div>
+            <div class='words-content' id='words-content'>
+                <div class='display-words-content' id='display-words-content'>
+                    <div class=' display-words-content-first'>
+                        <p id='firstWord'></p>
+                    </div>
+                    <div class='display-words-content-second'>
+                        <p id='secondWord'></p>
+                    </div>
+                    <div class='display-words-content-third' id='display-words-content-third'>
+                        <span id='thirdWord-span-green'></span><span id='thirdWord-span-black'></span>
+                    </div>
+                    <div class='display-words-content-fourth'>
+                        <p id='fourthWord'></p>
+                    </div>
+                    <div class='display-words-content-fifth'>
+                        <p id='fifthWord'></p>
+                    </div>
+                </div>
+            </div>
+            <div>
+            <button id='change-btn'> Change </button>
+            </div>
+            <div id='trial'></div>
+        </div>
+    </div>
+    <script src='./app.js' ></script>
   </body>
 </html>
