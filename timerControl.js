@@ -16,5 +16,4 @@ class TimerControl{
     }
 }
 
-
 module.exports = {TimerControl}

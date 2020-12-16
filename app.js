@@ -8,8 +8,8 @@ const { TimerControl } = require("./timerControl.js")
 
 let firstWord = document.getElementById('firstWord')
 let secondWord = document.getElementById('secondWord')
-let thirdWord = document.getElementById('thirdWord-span-black')
-let thirdWordGreen = document.getElementById('thirdWord-span-green')
+let mainWord = document.getElementById('thirdWord-span-black')
+let mainWordGreen = document.getElementById('thirdWord-span-green')
 let fourthWord = document.getElementById('fourthWord')
 let fifthWord = document.getElementById('fifthWord')
 let changeBtn = document.getElementById('change-btn')
@@ -40,12 +40,12 @@ class Carousel{
         let fourthWordDisplay = this.wordsList[1]
         let fifthWordDisplay = this.wordsList[2]
         this.wordIndex = 3
-        console.log(thirdWordDisplay)
-        thirdWord.innerHTML = thirdWordDisplay;
+
+        mainWord.innerHTML = thirdWordDisplay;
         fourthWord.innerHTML = fourthWordDisplay;
         fifthWord.innerHTML = fifthWordDisplay;
 
-        this.wordListDisplay = [firstWord.innerHTML, secondWord.innerHTML, thirdWord.innerHTML,fourthWord.innerHTML,fifthWord.innerHTML]
+        this.wordListDisplay = [firstWord.innerHTML, secondWord.innerHTML, mainWord.innerHTML,fourthWord.innerHTML,fifthWord.innerHTML]
     }
 
     showNextWord(){
@@ -58,10 +58,10 @@ class Carousel{
         console.log('aqui!!!!!:  ' + this.wordListDisplay)
         firstWord.innerHTML = this.wordListDisplay[0];
         secondWord.innerHTML = this.wordListDisplay[1];
-        thirdWord.innerHTML = this.wordListDisplay[2];
+        mainWord.innerHTML = this.wordListDisplay[2];
         fourthWord.innerHTML = this.wordListDisplay[3];
         fifthWord.innerHTML = this.wordListDisplay[4];   
-        thirdWordGreen.innerHTML = ''
+        mainWordGreen.innerHTML = ''
         this.wordIndex++
     }
     
@@ -78,20 +78,17 @@ class Carousel{
         return finalWord
     }
 
-    getThirdWord(){
-        return thirdWord
+    getMainWord(){
+        return mainWord
     }
 
     paintNextLetter(){
-
-        let wordArray = thirdWord.innerHTML.split("")
+        let wordArray = mainWord.innerHTML.split("")
         let firstLetter = wordArray[0]
 
         wordArray.shift()
-        thirdWord.innerHTML = wordArray.join('');
-        thirdWordGreen.innerHTML+=firstLetter
-        console.log('letter: ' + firstLetter)
-        console.log('array: ' + wordArray)
+        mainWord.innerHTML = wordArray.join('');
+        mainWordGreen.innerHTML+=firstLetter
     }
 }
 
@@ -110,7 +107,7 @@ document.addEventListener('keyup', (keyBoard)=>{
         
         wordTimer.reStartTimer()
         thirdWordDiv.style.filter= 'blur(0px)';
-        let matchWord = newCarousel.getThirdWord()
+        let matchWord = newCarousel.getMainWord()
         let matchWordInnerText = matchWord.innerText;
         let matchWordLength = matchWordInnerText.length
         let matchWordPointer = 0
