@@ -127,7 +127,7 @@ document.addEventListener('keyup', (keyBoard)=>{
                     matchWordPointer++;
                     newCheck.onSuccess();
                 }else{
-                    //TODO
+
                     newCheck.onCompleted()
                     matchWordPointer=0;
                     matchWordInnerText='';
