@@ -4,6 +4,7 @@
 
 const { TouchBarScrubber } = require("electron")
 const { TimerControl } = require("./timerControl.js")
+const { Checker, isEnterKeyPressed } = require('./checker.js')
 
 
 let firstWord = document.getElementById('firstWord')
@@ -14,10 +15,12 @@ let fourthWord = document.getElementById('fourthWord')
 let fifthWord = document.getElementById('fifthWord')
 let changeBtn = document.getElementById('change-btn')
 let thirdWordDiv = document.getElementById('display-words-content-third')
-let enterIsPressed = true
+
+
+let isEnterAllowed = true
 wordsList= ['hola','me','llamo','felipe','paz','martinez','y',
             'voy','a','ser','papa','dentro','de','siete',
-            'meses','palabra16','palabra17','palabra18','palabra19','palabra20','palabra21',
+            'meses','palabra16','palabra17','palabra18','palabra19','palabra20','palabra-21',
             ]
 
 class Carousel{
@@ -55,7 +58,7 @@ class Carousel{
                 this.wordListDisplay[i] = this.wordsList[this.wordIndex]
             }
         }
-        console.log('aqui!!!!!:  ' + this.wordListDisplay)
+        
         firstWord.innerHTML = this.wordListDisplay[0];
         secondWord.innerHTML = this.wordListDisplay[1];
         mainWord.innerHTML = this.wordListDisplay[2];
@@ -93,45 +96,46 @@ class Carousel{
 }
 
 let newCarousel = new Carousel(wordsList)
-newCarousel.displayWords()
+newCarousel.displayWords();
 
 changeBtn.addEventListener('click', ()=>{
-    newCarousel.showNextWord()
+    newCarousel.showNextWord();
 })
 
-wordTimer = new TimerControl()
+let wordTimer = new TimerControl()
+
 
 document.addEventListener('keyup', (keyBoard)=>{
 
-    if (keyBoard.key === 'Enter' && enterIsPressed === true){
+    if (isEnterKeyPressed (keyBoard.key , isEnterAllowed)){
         
-        wordTimer.reStartTimer()
+        wordTimer.reStartTimer();
         thirdWordDiv.style.filter= 'blur(0px)';
-        let matchWord = newCarousel.getMainWord()
-        let matchWordInnerText = matchWord.innerText;
-        let matchWordLength = matchWordInnerText.length
-        let matchWordPointer = 0
-        
+        let matchWord = newCarousel.getMainWord();
+        let matchWordInnerText = matchWord.innerHTML;
+        let matchWordPointer = 0;
+        isEnterAllowed = false;
+
         document.addEventListener('keyup', (keyBoard)=>{
-            console.log(keyBoard)
-            if (keyBoard.key === 'Enter'){
-                enterIsPressed= false
-            }
-            if (keyBoard.key === matchWordInnerText[matchWordPointer]){
-                 newCarousel.paintNextLetter()
-                matchWordPointer++
-            }
-            if (matchWordPointer === matchWordLength){
-                matchWordPointer=0;
-                console.log(matchWordInnerText)
-                matchWordInnerText=''
-                newCarousel.showNextWord()
-                wordTimer.setTimer()
-                enterIsPressed = true
-                thirdWordDiv.style.filter= 'blur(1.5px)';
-                firstWord.style.color = 'green'
-                secondWord.style.color = 'green'
-            }
+
+            let checkWord = {mainWord: matchWordInnerText, letter: keyBoard.key, indexLetter: matchWordPointer}
+            newCheck = new Checker();
+            newCheck.checkLetter(checkWord, (callback)=>{
+                if (callback === 'FAIL'){
+                    newCheck.onFail();
+                }else if (callback === 'SUCCESS'){
+                    matchWordPointer++;
+                    newCheck.onSuccess();
+                }else{
+                    newCheck.onCompleted()
+                    matchWordPointer=0;
+                    matchWordInnerText='';
+                    isEnterAllowed = true
+                    thirdWordDiv.style.filter= 'blur(1.5px)';
+                    firstWord.style.color = 'green';
+                    secondWord.style.color = 'green';
+                }
+            })
         })
     }
 })
